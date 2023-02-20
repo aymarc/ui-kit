@@ -172,7 +172,7 @@ function SelectMatrix(props) {
         } else if (currentOwnerType === "Role") {
           old_dy_data["role"][count] = sales_data;
         }
-        console.log(old_dy_data["role"]);
+        console.log("aoldData", old_dy_data["role"]);
         return old_dy_data;
       });
     }
