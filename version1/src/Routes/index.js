@@ -6,7 +6,7 @@ const AppRoutes = () => {
   return (
     <Routes>
       {/* <Route exact path="/" element={Home} /> */}
-      <Route path="/select-matrix" element={SelectMatrix} />
+      <Route path="/select-matrix" element={<SelectMatrix />} />
     </Routes>
   );
 };

@@ -1,16 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  Grid,
-  Typography,
-  List,
-  ListSubheader,
-  ListItem,
-  Button,
-  TextField,
-} from "@material-ui/core";
-import utils from "../../utils";
-import { useHistory } from "react-router";
-import dayjs from "dayjs";
+import Grid from "@mui/material/Grid";
+import Button from "@mui/material/Button";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -25,7 +15,7 @@ const rows = [
     id: 1,
     alert: "Row header1",
     sla: 10,
-    manager: "Nikhil",
+    manager: "Damien Smith",
     ownertype: "Individual",
     role: "Blank",
   },
@@ -33,7 +23,7 @@ const rows = [
     id: 2,
     alert: "Row header2",
     sla: 5,
-    manager: "Guilliano",
+    manager: "Celia Kounou",
     ownertype: "Individual",
     role: "Blank",
   },
@@ -171,7 +161,7 @@ function SelectMatrix(props) {
       setCurrentlyModifiedRow(count);
 
       setDy_drop_data((prevState) => {
-        const old_dy_data = Object.assign({}, prevState);
+        const old_dy_data = { ...prevState };
         if (!old_dy_data["role"]) {
           old_dy_data["role"] = {};
         }
@@ -210,74 +200,6 @@ function SelectMatrix(props) {
     });
   };
 
-  const fselect = ({
-    settingName,
-    recordCount,
-    recordId,
-    colNum,
-    currentOwnerType,
-    currentlyModifiedRow,
-  }) => {
-    let dropDownContent = [];
-    console.log(
-      "recordCount ",
-      recordCount,
-      "currentlyModifiedRow ",
-      currentlyModifiedRow
-    );
-    switch (settingName) {
-      case "manager":
-        dropDownContent = individual_usernames;
-        break;
-      case "ownertype":
-        dropDownContent = owners;
-        break;
-      case "role":
-        if (
-          currentOwnerType === "Blank" &&
-          recordCount === currentlyModifiedRow
-        ) {
-          dropDownContent = [];
-        } else if (
-          currentOwnerType === "Individual" &&
-          recordCount === currentlyModifiedRow
-        ) {
-          dropDownContent = individual_usernames;
-        } else if (
-          currentOwnerType === "Role" &&
-          recordCount === currentlyModifiedRow
-        ) {
-          dropDownContent = sales_data;
-        }
-        break;
-      default:
-        return;
-    }
-    const combo = (
-      <select
-        data-recid={recordId}
-        data-count={recordCount}
-        data-colname={settingName}
-        data-colnum={colNum}
-        name={`${settingName}${recordId}`}
-        value={comboState[`${settingName}${recordId}`]}
-        onChange={handleComboChange}
-        style={{ width: "100%" }}
-      >
-        <option value={0}></option>
-        {dropDownContent?.length &&
-          dropDownContent.map((drop) => {
-            return (
-              <option value={`${drop.lookupId}-${drop.displayValue}`}>
-                {drop.displayValue}
-              </option>
-            );
-          })}
-      </select>
-    );
-    return combo;
-  };
-
   const handleEditMode = () => {
     setEditModeOn(true);
   };
@@ -296,29 +218,13 @@ function SelectMatrix(props) {
   };
   async function handleConfirm() {
     try {
-      // if (!formValues || Object.keys(formValues).length <= 0) {
-      //     return swal({
-      //         title: "No action done",
-      //         text: "Can not save, No modification was done in data",
-      //         dangerMode: false
-      //     })
-      // }
       const newData = updateOldData(dataEdited, oldData);
       //const payload = { ...formValues, action: "save", id: 286 };
       console.log("dataEdited ", dataEdited);
       setData(newData);
       setEditModeOn(false);
-      // const result = await request({ url: apis['SystemUpdate'], params: payload, history, dispatch });
-      // if (result.success) {
-      //     handleCancel();
-      //     setFormData(result.data);
-      // }
     } catch (err) {
-      return swal({
-        title: "Some error occurred",
-        text: err.message || err,
-        dangerMode: true,
-      });
+      console.error(err);
     }
   }
 
@@ -348,7 +254,7 @@ function SelectMatrix(props) {
                 if (dy_drop_data["role"] && dy_drop_data["role"][key]) {
                   roleCombo = dy_drop_data["role"][key];
                 }
-
+                // console.log("dy_drop_data", dy_drop_data);
                 return (
                   <TableRow
                     key={row.name}
@@ -406,9 +312,6 @@ function SelectMatrix(props) {
       </TableContainer>
 
       <Grid container spacing={1} mt={2}>
-        {/* <Grid item xs={6} sm={6} md={6} lg={6} >
-                    {(formData.ModifiedOn && formData.ModifiedByUser) && <Typography variant="p">{`${t('Last Updated', tOpts)}: ${dayjs(formData.ModifiedOn).format('DD/MM/YYYY')}, ${formData.ModifiedByUser}`}</Typography>}
-                </Grid> */}
         <Grid item xs={6} sm={6} md={6} lg={6}>
           <Grid justifyContent="flex-end" container spacing={1}>
             <Grid item>
@@ -455,5 +358,3 @@ function SelectMatrix(props) {
 }
 
 export default SelectMatrix;
-
-ls;
